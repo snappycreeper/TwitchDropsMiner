@@ -604,12 +604,15 @@ class LoginForm:
         await asyncio.sleep(4)
         webopen(page_url)
 
-    def update(self, status: str, user_id: int | None):
+    def update(self, status: str, user_id: int | None, username: str | None = None):
         if user_id is not None:
             user_str = str(user_id)
         else:
             user_str = "-"
-        self._var.set(f"{status}\n{user_str}")
+        if username:
+            self._var.set(f"{status}\n{username}\n{user_str}")
+        else:
+            self._var.set(f"{status}\n-\n{user_str}")
 
 
 class _BaseVars(TypedDict):
