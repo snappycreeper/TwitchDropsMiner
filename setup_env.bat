@@ -18,7 +18,7 @@ REM Create the virtual environment if it doesn't exist
 if not exist "%dirpath%\env" (
     echo:
     echo Creating the env folder...
-    python -m venv "%dirpath%\env"
+    py -3.14 -m venv "%dirpath%\env"
     if %errorlevel% NEQ 0 (
         echo:
         echo No python executable found in PATH or failed to create virtual environment!

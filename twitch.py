@@ -646,7 +646,7 @@ class Twitch:
                     if not campaign.upcoming:
                         for drop in campaign.drops:
                             if drop.can_claim:
-                                await drop.claim()
+                                print("sus")
                 # figure out which games we want
                 self.wanted_games.clear()
                 exclude = self.settings.exclude
@@ -948,7 +948,7 @@ class Twitch:
     @task_wrapper(critical=True)
     async def _maintenance_task(self) -> None:
         now = datetime.now(timezone.utc)
-        next_period = now + timedelta(hours=1)
+        next_period = now + timedelta(minutes=20)
         while True:
             # exit if there's no need to repeat the loop
             now = datetime.now(timezone.utc)
@@ -985,14 +985,16 @@ class Twitch:
         if not channel.online:
             return False
         for campaign in self.inventory:
+            # 🚫 skip campaigns where ALL drops are claimable (fully done)
+            if all(drop.can_claim for drop in campaign.drops):
+                continue
+
             if (
-                campaign.can_earn(channel)  # let the campaign do the "special games" check
+                campaign.can_earn(channel)
                 and (
-                    # limit watching to the games the user wants
                     channel.game is not None
                     and channel.drops_enabled
                     and channel.game in self.wanted_games
-                    # let the campaign ignore all channel-related checks
                     or campaign.game.is_special_events()
                 )
             ):
@@ -1164,7 +1166,7 @@ class Twitch:
                 return
             drop.update_claim(message["data"]["drop_instance_id"])
             campaign = drop.campaign
-            await drop.claim()
+            #await drop.claim()
             drop.display()
             # About 4-20s after claiming the drop, next drop can be started
             # by re-sending the watch payload. We can test for it by fetching the current drop
