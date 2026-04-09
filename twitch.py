@@ -643,11 +643,11 @@ class Twitch:
                 self.change_state(State.GAMES_UPDATE)
             elif self._state is State.GAMES_UPDATE:
                 # claim drops from expired and active campaigns
-                for campaign in self.inventory:
-                    if not campaign.upcoming:
-                        for drop in campaign.drops:
-                            if drop.can_claim:
-                                print("sus")
+                #for campaign in self.inventory:
+                    #if not campaign.upcoming:
+                        #for drop in campaign.drops:
+                            #if drop.can_claim:
+                                
                 # figure out which games we want
                 self.wanted_games.clear()
                 exclude = self.settings.exclude
